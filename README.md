@@ -15,12 +15,14 @@
 <li> Redirection</li>
 </ul>
 
-`22.07.06 (책)
+`22.07.06~ (책)
 
 <ul>
     <li> Basic HTML/CSS, Javascript</li>
     <li> Basic Bootstrap</li>
     <li> Basic Django</li>
+    <li> Django Models</li>
+    <li> Post 생성/업데이트 시간 저장 </li>
 </ul>
 
 <hr/>
