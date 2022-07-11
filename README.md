@@ -23,6 +23,7 @@
     <li> Basic Django</li>
     <li> Django Models</li>
     <li> Post 생성/업데이트 시간 저장 </li>
+    <li> FBV </li>
 </ul>
 
 <hr/>
