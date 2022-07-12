@@ -1,6 +1,7 @@
-from django.shortcuts import render
 from .models import Post
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
+# from django.shortcuts import render
+
 # CBV
 
 
@@ -10,9 +11,8 @@ class PostList(ListView):
     ordering = '-pk'
 
 
-
-
-
+class PostDetail(DetailView):
+    model = Post
 
 # FBV
 # def index(request):
@@ -27,13 +27,13 @@ class PostList(ListView):
 #     )
 #
 #
-def single_post_page(request, pk):
-    post = Post.objects.get(pk=pk)
-
-    return render(
-        request,
-        'blog/single_post_page.html',
-        {
-            'post': post,
-        }
-    )
+# def single_post_page(request, pk):
+#     post = Post.objects.get(pk=pk)
+#
+#     return render(
+#         request,
+#         'blog/single_post_page.html',
+#         {
+#             'post': post,
+#         }
+#     )
