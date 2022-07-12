@@ -27,6 +27,7 @@
     <li> 랜딩 페이지/소개 페이지 설정 </li>
     <li> views.generic.ListView / DetailView</li>
     <li> CBV 사용하여 포스트 목록 나타내기 </li>
+    <li> MTV 구조</li>
 </ul>
 
 <hr/>
