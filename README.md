@@ -24,6 +24,7 @@
     <li> Django Models</li>
     <li> Post 생성/업데이트 시간 저장 </li>
     <li> FBV 사용하여 포스트 상세페이지 나타내기 </li>
+    <li> 랜딩 페이지/소개 페이지 설정 </li>
 </ul>
 
 <hr/>
