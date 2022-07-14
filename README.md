@@ -30,6 +30,7 @@
     <li> MTV 구조</li>
     <li> 부트 스트랩 적용</li>
     <li> imageField</li>
+    <li> 파일 업로드 기능</li>
 </ul>
 
 <hr/>
