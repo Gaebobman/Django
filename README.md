@@ -29,6 +29,7 @@
     <li> CBV 사용하여 포스트 목록 나타내기 </li>
     <li> MTV 구조</li>
     <li> 부트 스트랩 적용</li>
+    <li> imageField</li>
 </ul>
 
 <hr/>
