@@ -31,6 +31,8 @@
     <li> 부트 스트랩 적용</li>
     <li> imageField</li>
     <li> 파일 업로드 기능</li>
+    <li> Test Driven Development</li>
+    <li> Beautiful Soup을 이용하여 테스트</li>
 </ul>
 
 <hr/>
