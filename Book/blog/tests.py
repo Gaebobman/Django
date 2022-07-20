@@ -60,3 +60,35 @@ class TestView(TestCase):
         self.assertIn(post_002.title, main_area.text)
         # 게시물이 2개 존재하므로 아직 게시물이 없습니다 라는 문구가 나타나지 않음
         self.assertNotIn('아직 게시물이 없습니다', main_area.text)
+
+    def test_post_detail(self):
+        # 1.1 포스트가 하나 있음
+        post_001 = Post.objects.create(
+            title='첫 번째 포스트 입니다.',
+            content='Heeeeellllloooooo World',
+        )
+        # 1.2 포스트의 url은 /blog/1/ 임.
+        self.assertEqual(post_001.get_absolute_url(), '/blog/1')
+        # 2. 첫 번째 포스트의 상세 페이지 테스트
+        # 2.1. 첫 번째 포스트의 url로 접근하면 정상적으로 작동한다. (Code:200)
+        response = self.client.get(post_001.get_absolute_url(), follow=True)
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        # 2.2. 네비게이션 바 테스트
+        navbar = soup.nav
+        self.assertIn('Blog', navbar.text)
+        self.assertIn('About Me', navbar.text)
+
+        # 2.3. 첫 번째 포스트의 제목이 타이틀
+        self.assertIn(post_001.title, soup.title.text)
+
+        # 2.4. 포스트 영역에 제목이 있음
+        main_area = soup.find('div', id='main-area')
+        post_area = main_area.find('div', id='post-area')
+        self.assertIn(post_001.title, post_area.text)
+
+        # 2.5. 작성자가 포스트 영역에 있음
+        # PASS
+
+        # 2.6. 포스트의 내용이 포스트 영역에 있음
+        self.assertIn(post_001.content, post_area.text)
