@@ -33,7 +33,9 @@
     <li> 파일 업로드 기능</li>
     <li> Test Driven Development</li>
     <li> Beautiful Soup을 이용하여 테스트</li>
-    <li> 템플릿 공통부분모듈화 및 테스트</li>
+    <li> 템플릿 공통부분 모듈화 및 테스트</li>
+    <li> 네비게이션바, 푸터 모듈화</li>
+    <li> 모델에서의 다대일 관계</li>
 </ul>
 
 <hr/>
