@@ -7,6 +7,28 @@ class TestView(TestCase):
         # 테스트를 위한 가상의 사용자
         self.client = Client()
 
+    def navbar_test(self, soup):
+        # 네비게이션 바를 가져옴
+        navbar = soup.nav
+        # 네비게이션 바 안의 컨텐츠 들을 확인한다
+        self.assertIn('Blog', navbar.text)
+        self.assertIn('About Me', navbar.text)
+
+        # 버튼 클릭시 의도한 페이지로 이동하는가?
+        logo_btn = navbar.find('a', text='Do It Django')
+        self.assertEqual(logo_btn.attrs['href'], '/')
+
+        home_btn = navbar.find('a', text='Home')
+        self.assertEqual(home_btn.attrs['href'], '/')
+
+        blog_btn = navbar.find('a', text='Blog')
+        self.assertEqual(blog_btn.attrs['href'], '/blog/')
+
+        about_me_btn = navbar.find('a', text='About Me')
+        self.assertEqual(about_me_btn.attrs['href'], '/about_me/')
+
+
+
     def test_post_list(self):
         # 포스트 목록을 가져옴
         # 사용자가 127.0.0.1:8000/blog/ 에 접근하는 상황을 가정, 이를 response에 저장
@@ -22,12 +44,9 @@ class TestView(TestCase):
         # 그 후 텍스트만 가져와서 텍스트가 Blog 인지 확인
         soup = BeautifulSoup(response.content, 'html.parser')
         self.assertEqual(soup.title.text, 'Blog')
+        # navbar test
+        self.navbar_test(soup)
 
-        # 네비게이션 바를 가져옴
-        navbar = soup.nav
-        # 네비게이션 바 안의 컨텐츠 들을 확인한다
-        self.assertIn('Blog', navbar.text)
-        self.assertIn('About Me', navbar.text)
 
         # 작성된 포스트가 0개 인지 확인
         # 테스트 시작시 테스트용 데이터 베이스를 생성함, 단 setUp() 함수 에서 설정한 요소는 포함 시킴
@@ -75,9 +94,7 @@ class TestView(TestCase):
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html.parser')
         # 2.2. 네비게이션 바 테스트
-        navbar = soup.nav
-        self.assertIn('Blog', navbar.text)
-        self.assertIn('About Me', navbar.text)
+        self.navbar_test(soup)
 
         # 2.3. 첫 번째 포스트의 제목이 타이틀
         self.assertIn(post_001.title, soup.title.text)
