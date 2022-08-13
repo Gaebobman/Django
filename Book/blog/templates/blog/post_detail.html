@@ -5,9 +5,14 @@
 {% endblock %}
 {% block main_area %}
     <div id="post-area">
-
+        <!-- Post categories-->
+        {% if post.category %}
+            <span class="badge bg-secondary float-end">{{ post.category }}</span>
+        {% else %}
+            <span class="badge bg-secondary float-end">미분류</span>
+        {% endif %}
         <h1 class="mt-4">{{ post.title }}</h1>
-
+        <hr>
         <h5 class="text-muted">{{ post.hook_text }}</h5>
         <!-- Post meta content-->
         {% if user.is_authenticated and user == post.author %}
@@ -19,12 +24,7 @@
         </p>
 
         <hr>
-        <!-- Post categories-->
-        {% if post.category %}
-            <span class="badge bg-secondary ">{{ post.category }}</span>
-        {% else %}
-            <span class="badge bg-secondary">미분류</span>
-        {% endif %}
+
         <br/>
         <br/>
         <!-- Preview image figure-->
