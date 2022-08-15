@@ -46,6 +46,7 @@
     <li> 로그인 된 사용자만 포스팅 하도록 수정 </li>
     <li> 포스트 수정기능 추가</li>
     <li> 태그 수정기능 추가</li>
+    <li> django-crispy-forms 적용</li>
 </ul>
 
 <hr/>
