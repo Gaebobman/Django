@@ -47,6 +47,7 @@
     <li> 포스트 수정기능 추가</li>
     <li> 태그 수정기능 추가</li>
     <li> django-crispy-forms 적용</li>
+    <li> 게시글에 Markdown 문법을 사용 가능 </li>
 </ul>
 
 <hr/>
