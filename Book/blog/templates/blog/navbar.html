@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 {% load static %}
+{% load socialaccount %}
 <head>
     <title>{% block head_title %}Blog{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}" media="screen">
@@ -25,22 +26,23 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/about_me/">About Me</a>
                 </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown link
+                        {{ user.username }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item" href="/accounts/logout">Log Out</a>
                     </div>
                 </li>
-            </ul>
-            <ul class="navbar-nav ms-auto">
+                {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Log In</a>
                 </li>
+                {% endif %}
             </ul>
         </div>
     </div>
@@ -59,9 +61,9 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <button type="button" class="btn btn-outline-dark w-100 btn-sm "><i
+                        <a role="button" class="btn btn-outline-dark w-100 btn-sm " href="{% provider_login_url 'google' %}"><i
                                 class="fa-brands fa-google"></i>&nbsp&nbsp Log in with Google
-                        </button>
+                        </a>
                         <button type="button" class="btn btn-outline-dark w-100 btn-sm"><i
                                 class="fa-solid fa-envelope"></i>&nbsp&nbsp Log in with E-mail
                         </button>
