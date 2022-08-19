@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from bs4 import BeautifulSoup
 from django.contrib.auth.models import User
-from .models import Post, Category, Tag
+from .models import Post, Category, Tag, Comment
 
 
 class TestView(TestCase):
@@ -41,6 +41,12 @@ class TestView(TestCase):
         )
         self.post_003.tags.add(self.tag_python_kor)
         self.post_003.tags.add(self.tag_python)
+
+        self.comment_001 = Comment.objects.create(
+            post=self.post_001,
+            author=self.user_kakao,
+            content='첫 번째 댓글입니다. '
+        )
 
     def navbar_test(self, soup):
         # 네비게이션 바를 가져옴
@@ -153,6 +159,12 @@ class TestView(TestCase):
         self.assertIn(self.tag_hello.name, post_area.text)
         self.assertNotIn(self.tag_python.name, post_area.text)
         self.assertNotIn(self.tag_python_kor.name, post_area.text)
+        
+        # 댓글 영역 테스트
+        comments_area = soup.find('div', id='comment-area')
+        comment_001_area = comments_area.find('div', id='comment-1')
+        self.assertIn(self.comment_001.author.username, comment_001_area.text)
+        self.assertIn(self.comment_001.content, comment_001_area.text)
 
     def test_category_page(self):
         response = self.client.get(self.category_law.get_absolute_url())
@@ -188,7 +200,7 @@ class TestView(TestCase):
 
     def test_create_post(self):
         # 로그인 하지 않은 상태 로는 글쓰기 접근 불가능 해야 함 (Status Code Not equal to 200)
-        response = self.client.get('/blog/create_post/', follow=True)
+        response = self.client.get('/blog/create_post/')
         self.assertNotEqual(response.status_code, 200)
 
         # Staff 권한 없는 사용자로 로그인

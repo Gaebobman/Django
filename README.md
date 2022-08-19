@@ -49,6 +49,7 @@
     <li> django-crispy-forms 적용</li>
     <li> 게시글에 Markdown 문법을 사용 가능</li>
     <li> 소셜로그인(구글) 기능 추가</li>
+    <li> 댓글기능 추가 </li>
 </ul>
 
 <hr/>
