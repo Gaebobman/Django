@@ -156,7 +156,6 @@ def new_comment(request, pk):
         post = get_object_or_404(Post, pk=pk)
 
         if request.method == 'POST':
-            print('새로운 댓글')
             comment_form = CommentForm(request.POST)
             if comment_form.is_valid():
                 comment = comment_form.save(commit=False)

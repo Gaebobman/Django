@@ -12,7 +12,7 @@ class TestView(TestCase):
         self.user_kakao = User.objects.create_user(username='kakao', password='passwooord')
         self.user_naver.is_staff = True
         self.user_naver.save()
-        
+
         self.category_law = Category.objects.create(name='law', slug='law')
         self.category_engineering = Category.objects.create(name='engineering', slug='engineering')
 
@@ -159,7 +159,7 @@ class TestView(TestCase):
         self.assertIn(self.tag_hello.name, post_area.text)
         self.assertNotIn(self.tag_python.name, post_area.text)
         self.assertNotIn(self.tag_python_kor.name, post_area.text)
-        
+
         # 댓글 영역 테스트
         comments_area = soup.find('div', id='comment-area')
         comment_001_area = comments_area.find('div', id='comment-1')
@@ -207,7 +207,7 @@ class TestView(TestCase):
         self.client.login(username='kakao', password='passwooord')
         response = self.client.get('/blog/create_post/', follow=True)
         self.assertNotEqual(response.status_code, 200)
-        
+
         # Staff 권한이 있는 사용자로 로그인
         self.client.login(username='naver', password='passwooord')
         response = self.client.get('/blog/create_post/', follow=True)
@@ -220,7 +220,7 @@ class TestView(TestCase):
 
         tag_str_input = main_area.find('input', id='id_tags_str')
         self.assertTrue(tag_str_input)
-        
+
         self.client.post(
             '/blog/create_post/',
             {
@@ -265,7 +265,7 @@ class TestView(TestCase):
         soup = BeautifulSoup(response.content, 'html.parser')
 
         self.assertEqual('Edit Post - Blog', soup.title.text)
-        main_area = soup. find('div', id='main-area')
+        main_area = soup.find('div', id='main-area')
         self.assertIn('Edit Post', main_area.text)
 
         tag_str_input = main_area.find('input', id='id_tags_str')
@@ -295,7 +295,7 @@ class TestView(TestCase):
     def test_comment_form(self):
         self.assertEqual(Comment.objects.count(), 1)
         self.assertEqual(self.post_001.comment_set.count(), 1)
-        
+
         # 로그인 하지 않은 상태를 테스트
         response = self.client.get(self.post_001.get_absolute_url(), follow=True)
         self.assertEqual(response.status_code, 200)
@@ -304,7 +304,7 @@ class TestView(TestCase):
         comment_area = soup.find('div', id='comment-area')
         self.assertIn('Log in and leave a comment', comment_area.text)
         self.assertFalse(comment_area.find('form', id='comment-form'))
-        
+
         # 로그인한 상태
         self.client.login(username='naver', password='passwooord')
         response = self.client.get(self.post_001.get_absolute_url(), follow=True)
@@ -317,7 +317,7 @@ class TestView(TestCase):
         comment_form = comment_area.find('form', id='comment-form')
         self.assertTrue(comment_form.find('textarea', id='id_content'))
         response = self.client.post(
-            self.post_001.get_absolute_url() + 'new_comment/',
+            self.post_001.get_absolute_url() + '/new_comment/',
             {
                 'content': '더 이상은 Naver.',
             },
@@ -325,7 +325,6 @@ class TestView(TestCase):
         )
         # print(self.post_001.get_absolute_url() + 'new_comment/')
         self.assertEqual(response.status_code, 200)
-
         self.assertEqual(Comment.objects.count(), 2)
         self.assertEqual(self.post_001.comment_set.count(), 2)
 
@@ -339,6 +338,52 @@ class TestView(TestCase):
         self.assertIn('naver', new_comment_div.text)
         self.assertIn('더 이상은 Naver.', new_comment_div.text)
 
+    def test_comment_update(self):
+        comment_by_naver = Comment.objects.create(
+            post=self.post_001,
+            author=self.user_naver,
+            content='네이버의 댓글'
+        )
+        response = self.client.get(self.post_001.get_absolute_url(),follow=True)
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
 
-
+        comment_area = soup.find('div', id='comment-area')
+        self.assertFalse(comment_area.find('a', id='comment-1-update-btn'))
+        self.assertFalse(comment_area.find('a', id='comment-2-update-btn'))
         
+        # 로그인 한 상태
+        self.client.login(username='kakao', password='passwooord')
+        response = self.client.get(self.post_001.get_absolute_url(), follow=True)
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        comment_area = soup.find('div', id='comment-area')
+        comment_001_update_btn = comment_area.find('a', id='comment-1-update-btn')
+
+        self.assertIn('edit', comment_001_update_btn.text)
+        self.assertEqual(comment_001_update_btn.attrs['href'], '/blog/update_comment/1/')
+
+        response = self.client.get('/blog/update_comment/1/')
+        self.assertEqual(response.status_code, 200)
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        self.assertEqual('Edit Comment - Blog', soup.title.text)
+        update_comment_form = soup.find('form', id='comment-form')
+        content_textarea = update_comment_form.find('textarea', id='id_content')
+        self.assertIn(self.comment_001.content, content_textarea.text)
+
+        response = self.client.post(
+            f'/blog/update_comment/{self.comment_001.pk}',
+            {
+                'content': "네이버의 댓글을 수정합니다.",
+            },
+            follow=True
+        )
+        
+        self.assertEqual(response.status_code, 200)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        comment_001_div = soup.find('div', id='comment-1')
+        self.assertIn('네이버의 댓글을 수정합니다.', comment_001_div.text)
+        self.assertIn('Updated: ', comment_001_div.text)

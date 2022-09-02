@@ -77,7 +77,7 @@
                     <!-- Comment form-->
                     {% if user.is_authenticated %}
                         <form id="comment-form" method="POST" action="{{ post.get_absolute_url }}/new_comment/">
-                        {% csrf_token %}
+                            {% csrf_token %}
                             <div class="form-group">
                                 {{ comment_form | crispy }}
                             </div>
@@ -85,7 +85,8 @@
                         </form>
                     {% else %}
                         <a role="button" class="btn btn-outline-dark btn-block btn-sm" href="#"
-                           data-toggle="modal" data-target="#loginModal" style="display: block; ">Log in and leave a comment</a>
+                           data-toggle="modal" data-target="#loginModal" style="display: block; ">Log in and leave a
+                            comment</a>
                         <hr/>
                     {% endif %}
                 </div>
@@ -98,9 +99,18 @@
                                                                 src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
                                                                 alt="..."/></div>
                                 <div class="ms-3">
+                                    {% if user.is_authenticated and comment.author == user %}
+                                        <a role="button"
+                                           class="btn btn-sm btn-info float-end"
+                                           id="comment-{{ comment.pk }}-update-btn"
+                                           href="/blog/update_comment/{{ comment.pk }}/">
+                                            edit
+                                        </a>
+                                    {% endif %}
                                     <div class="fw-bold">{{ comment.author.username }} &nbsp;&nbsp;<small
                                             class="text-muted">{{ comment.created_at }}</small></div>
                                     <p>{{ comment.content | linebreaks }}</p>
+
                                 </div>
                             </div>
                         {% endfor %}
